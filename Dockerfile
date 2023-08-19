@@ -1,15 +1,13 @@
-FROM ubuntu:latest
+FROM btpanel/bt
+MAINTAINER YourName <your_email@example.com>
 
 
-RUN apt-get update && \
-    apt-get install -y curl wget
+ENV BT_PANEL_USERNAME=admin
+ENV BT_PANEL_PASSWORD=123456
 
+RUN /etc/init.d/bt start && \
+    sleep 5 && \
+    /etc/init.d/bt default_install ${BT_PANEL_USERNAME} ${BT_PANEL_PASSWORD}
 
-RUN wget -O install.sh http://download.bt.cn/install/install-ubuntu_6.0.sh && \
-    echo y | bash install.sh
-
-
-EXPOSE 8888
-
-
-CMD /etc/init.d/bt start && tail -f /dev/null
+# Expose port 8888 for web access
+EXPOSE 80
